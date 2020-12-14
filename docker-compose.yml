@@ -1,0 +1,12 @@
+version: "2"
+# volumes:
+services:
+  gpio:
+    restart: always
+    build: ./gpio
+    privileged: true
+    # volumes:
+    # environment:
+    labels:
+      io.balena.features.dbus: "1"
+      io.balena.features.firmware: "1"

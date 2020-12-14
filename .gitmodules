@@ -1,0 +1,3 @@
+[submodule "gpio/pi-blaster"]
+	path = gpio/pi-blaster
+	url = git@github.com:sarfata/pi-blaster.git

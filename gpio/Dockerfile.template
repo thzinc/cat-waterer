@@ -1,0 +1,14 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.12-build as builder
+RUN install_packages build-base autoconf automake linux-headers
+WORKDIR /pi-blaster
+COPY ./pi-blaster/ .
+RUN ./autogen.sh
+RUN ./configure
+RUN make
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.12-run as HACK
+# Hack?
+WORKDIR /app
+COPY --from=builder /pi-blaster/pi-blaster .
+RUN ls -l
+CMD ["./pi-blaster", "--foreground"]
