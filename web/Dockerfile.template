@@ -22,4 +22,4 @@ WORKDIR /app
 COPY --from=pi-blaster-builder /pi-blaster/pi-blaster .
 COPY --from=build /app /app
 
-CMD ["npm", "start:container"]
+CMD ["npm", "run", "start:container"]
