@@ -17,6 +17,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "start:container": "./pi-blaster --foreground && node server.js",
     "start:cra": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

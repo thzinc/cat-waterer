@@ -1,15 +1,5 @@
 version: "2"
-# volumes:
 services:
-  # gpio:
-  #   restart: always
-  #   build: ./gpio
-  #   privileged: true
-  #   # volumes:
-  #   # environment:
-  #   labels:
-  #     io.balena.features.dbus: "1"
-  #     io.balena.features.firmware: "1"
   web:
     restart: always
     build: ./web
@@ -17,8 +7,5 @@ services:
     labels:
       io.balena.features.dbus: "1"
       io.balena.features.firmware: "1"
-  # scanner:
-  #   build: ./scanner
-  #   restart: always
-  #   privileged: true
-  #   network_mode: host
+    ports:
+      - "80:80"

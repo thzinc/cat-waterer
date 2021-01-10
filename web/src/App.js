@@ -3,50 +3,18 @@ import io from 'socket.io-client';
 import './App.css';
 
 const socket = io();
-// const socket = {
-//   t: null,
-//   emit: (event, value) => {
-//     console.log('emit', event, value);
-//     const handler = socket.handlers[event];
-//     if (handler) return handler(value);
-
-//     switch (event) {
-//       case 'start':
-//         const { duration = 0 } = value;
-//         const end = new Date(new Date().getTime() + duration);
-
-//         console.log('setting end to', end, duration);
-//         clearInterval(socket.t);
-//         socket.t = setInterval(() => {
-//           const now = new Date();
-//           if (end < now) {
-//             return socket.emit('stop');
-//           }
-//           socket.emit('started', {
-//             duration: end - now,
-//           });
-//         }, 250);
-//         return;
-//       case 'stop':
-//         clearInterval(socket.t);
-//         socket.emit('stopped');
-//         return;
-//       default:
-//         return;
-//     }
-//   },
-//   handlers: {},
-//   on: (event, handler) => {
-//     console.log('on', event, handler);
-//     socket.handlers[event] = handler;
-//   },
-//   off: () => {},
-// };
 const start = (seconds) => {
   socket.emit('start', { duration: seconds * 1000 });
 };
 
-function PumpStatus({ isOn = false, duration = 0 }) {
+function PumpStatus({ isConnected = false, isOn = false, duration = 0 }) {
+  if (!isConnected) {
+    return (
+      <p>
+        Not connected <div className="pump-disconnected">🔌</div>
+      </p>
+    );
+  }
   if (isOn) {
     const [minutes, seconds] = [
       Math.floor(duration / 1000 / 60),
@@ -66,10 +34,13 @@ function PumpStatus({ isOn = false, duration = 0 }) {
 }
 
 function App() {
+  const [isConnected, setIsConnected] = useState(false);
   const [isOn, setIsOn] = useState(false);
   const [remainingDuration, setRemainingDuration] = useState(null);
   const durationEl = useRef(null);
   useEffect(() => {
+    socket.on('connect', () => setIsConnected(true));
+    socket.on('disconnect', () => setIsConnected(false));
     socket.on('started', ({ duration }) => {
       setIsOn(true);
       setRemainingDuration(duration);
@@ -83,10 +54,14 @@ function App() {
 
   return (
     <div className="App">
-      <header>cat waterer</header>
+      <header>Cat Waterer</header>
       <main>
         <section className="pump-status">
-          <PumpStatus isOn={isOn} duration={remainingDuration} />
+          <PumpStatus
+            isConnected={isConnected}
+            isOn={isOn}
+            duration={remainingDuration}
+          />
         </section>
         <section className="pump-controls">
           <label htmlFor="seconds">
@@ -103,7 +78,7 @@ function App() {
           <button onClick={() => start(durationEl.current.value)}>Start</button>
         </section>
       </main>
-      <footer>Made with love for Rufus</footer>
+      <footer>Made with ♥️ for Rufus 😻</footer>
     </div>
   );
 }

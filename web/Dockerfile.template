@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.12-build as builder
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.12-build as pi-blaster-builder
 RUN install_packages build-base autoconf automake linux-headers
 WORKDIR /pi-blaster
 COPY ./pi-blaster/ .
@@ -17,10 +17,9 @@ COPY . ./
 RUN yarn build
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-node:12-latest-run
-#Set permissions to allow BLE scanning
-RUN sudo setcap cap_net_raw+eip $(eval readlink -f `which node`)
 
 WORKDIR /app
+COPY --from=pi-blaster-builder /pi-blaster/pi-blaster .
 COPY --from=build /app /app
 
-CMD ["npm", "start"]
+CMD ["npm", "start:container"]

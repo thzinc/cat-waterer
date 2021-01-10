@@ -38,6 +38,7 @@
   transform: scale(0.5);
 }
 
+.pump-disconnected,
 .pump-on,
 .pump-off {
   /* display: inline-block; */
