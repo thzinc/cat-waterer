@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Color = require('color');
+const { spawn } = require('child_process');
 
 const states = {
   starting: {
@@ -31,6 +32,12 @@ let epoch = null;
 const FPS = 5;
 const delay = 1000 / FPS;
 const piBlaster = process.env.PI_BLASTER || '/dev/pi-blaster';
+const [command, ...args] = (
+  process.env.PI_BLASTER_BIN || './pi-blaster --foreground'
+).split(' ');
+
+const pb = spawn(command, args);
+
 let int = null;
 const pins = {
   R: process.env.PIN_R || '17',
