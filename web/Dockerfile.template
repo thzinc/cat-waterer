@@ -10,11 +10,11 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-node:12-latest-build as build
 WORKDIR /app
 
 COPY ./package.json ./
-COPY ./yarn-lock.json ./
-RUN yarn
+COPY ./package-lock.json ./
+RUN npm install
 
 COPY . ./
-RUN yarn build
+RUN npm run build
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-node:12-latest-run
 
