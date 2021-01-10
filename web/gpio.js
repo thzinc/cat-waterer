@@ -36,7 +36,7 @@ const [command, ...args] = (
   process.env.PI_BLASTER_BIN || './pi-blaster --foreground'
 ).split(' ');
 
-const pb = spawn(command, args);
+spawn(command, args);
 
 let int = null;
 const pins = {
@@ -95,9 +95,45 @@ module.exports.start = () => {
       `${pins.G}=${gp.toFixed(2)}`,
       `${pins.B}=${bp.toFixed(2)}`,
     ].join(' ');
-    fs.writeFileSync(piBlaster, values, console.log);
+    writeCommand(piBlaster, values, (err) => {
+      if (err) console.error(err);
+    });
   }, delay);
 };
+
+// From: https://github.com/sarfata/pi-blaster.js/blob/master/pi-blaster.js
+function writeCommand(piBlasterPath, cmd, callback) {
+  const buffer = Buffer.from(cmd + '\n');
+  fs.open(piBlasterPath, 'w', undefined, function (err, fd) {
+    if (err) {
+      if (callback && typeof callback == 'function') {
+        callback(err);
+      }
+    } else {
+      fs.write(
+        fd,
+        buffer,
+        0,
+        buffer.length,
+        -1,
+        function (error, written, buffer) {
+          if (error) {
+            if (callback && typeof callback == 'function') {
+              callback(error);
+            }
+          } else {
+            fs.close(fd, function (err) {
+              if (err) callback(err);
+            });
+            if (callback && typeof callback == 'function') {
+              callback();
+            }
+          }
+        }
+      );
+    }
+  });
+}
 
 module.exports.stop = () => {
   console.log('stopping');
