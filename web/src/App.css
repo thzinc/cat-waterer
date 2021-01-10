@@ -1,0 +1,110 @@
+* {
+  box-sizing: border-box;
+}
+.App {
+  text-align: center;
+  background-color: black;
+  color: #999;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App header,
+.App footer {
+  height: 2rem;
+}
+
+.App main {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.pump-status {
+  flex: 0;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  background-color: #222;
+}
+
+.pump-status p {
+  width: 100%;
+}
+
+.pump-on {
+  transform: scale(0.5);
+}
+
+.pump-on,
+.pump-off {
+  /* display: inline-block; */
+  margin-top: 1rem;
+}
+
+@keyframes pump-rain {
+  from {
+    transform: translate(-0.5rem, -0.5rem);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  75% {
+    opacity: 1;
+  }
+  to {
+    transform: translate(0.5rem, 0.5rem);
+    opacity: 0;
+  }
+}
+
+@keyframes pump-sleep {
+  from {
+    transform: scale(0.25, 0.25) translate(0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.5, 1.5) translate(1rem, -1rem);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pump-on {
+    animation: pump-rain infinite 1s linear;
+  }
+  .pump-off {
+    animation: pump-sleep infinite 3s linear;
+  }
+}
+
+.pump-controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 1.5rem;
+}
+
+.pump-controls input {
+  width: 4.5rem;
+  margin: 0 0.5rem;
+  padding: 0 0.5rem;
+  font-size: 1.5rem;
+  background-color: #999;
+  border: none;
+  border-radius: 1.5rem;
+}
+
+.pump-controls button {
+  display: block;
+  width: 100%;
+  font-size: 3rem;
+  background-color: #999;
+  /* border: none; */
+  border-radius: 1.5rem;
+}
