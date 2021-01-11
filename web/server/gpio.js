@@ -24,6 +24,7 @@ const states = {
     transitions: [
       { lights: '#335599', pump: 1 },
       { lights: '#000099', pump: 1 },
+      { lights: '#000000', pump: 1 },
       { lights: '#000000', pump: 0 },
     ],
   },
@@ -87,7 +88,7 @@ module.exports.start = () => {
       transitions[Math.ceil(curr)],
     ];
     const lights = Color(from.lights).mix(Color(to.lights), mix);
-    const pump = from.pump + (to.pump - from.pump) * mix;
+    const pump = to.pump;
     const [r, g, b] = lights.rgb().array();
     const [rp, gp, bp] = [r / 255, g / 255, b / 255];
     const values = [
