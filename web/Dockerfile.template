@@ -13,8 +13,11 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 RUN npm install
 
-COPY . ./
+COPY ./public/ ./public/
+COPY ./src/ ./src/
 RUN npm run build
+
+COPY . ./
 
 FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:12-latest-run
 
@@ -22,4 +25,4 @@ WORKDIR /app
 COPY --from=build /app /app
 COPY --from=pi-blaster-builder /pi-blaster/pi-blaster .
 
-CMD ["npm", "start"]
+CMD ["node", "server/index.js"]

@@ -4,32 +4,33 @@ const { spawn } = require('child_process');
 
 const states = {
   starting: {
-    duration: 3000,
+    duration: 5000,
     transitions: [
-      { lights: '#000000', pump: 0 },
+      { lights: '#000000', pump: 1 },
       { lights: '#000099', pump: 1 },
-      { lights: '#3355FF', pump: 1 },
+      { lights: '#335599', pump: 1 },
     ],
   },
   running: {
     duration: 2000,
     transitions: [
-      { lights: '#3355FF', pump: 1 },
+      { lights: '#335599', pump: 1 },
       { lights: '#CCCCFF', pump: 1 },
+      { lights: '#335599', pump: 1 },
     ],
   },
   ending: {
-    duration: 3000,
+    duration: 15000,
     transitions: [
-      { lights: '#3355FF', pump: 1 },
-      { lights: '#000099', pump: 0 },
+      { lights: '#335599', pump: 1 },
+      { lights: '#000099', pump: 1 },
       { lights: '#000000', pump: 0 },
     ],
   },
 };
 let state = null;
 let epoch = null;
-const FPS = 5;
+const FPS = 30;
 const delay = 1000 / FPS;
 const piBlaster = process.env.PI_BLASTER || '/dev/pi-blaster';
 const [command, ...args] = (
